@@ -813,6 +813,7 @@ function quickMenu() {
 <option value="edit_texts">Texts</option>
 <option value="edit_archivedtexts">Text Archive</option>
 <option value="edit_texttags">Text Tags</option>
+<option value="edit_sentences">Sentences</option>
 <option value="edit_languages">Languages</option>
 <option value="edit_words">Terms</option>
 <option value="edit_tags">Term Tags</option>
