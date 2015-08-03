@@ -40,7 +40,7 @@ Call: edit_texts.php?....
       ... op=Change ... do update
       ... op=Save+and+Open ... do insert new and open 
       ... op=Change+and+Open ... do update and open
-      ... new=1 ... display new text screen 
+      ... new=1 ... display new sentence screen 
       ... chg=[textid] ... display edit screen 
       ... filterlang=[langid] ... language filter 
       ... sort=[sortcode] ... sort 
@@ -95,7 +95,7 @@ else {
 $no_pagestart = (getreq('markaction') == 'test' || getreq('markaction') == 'deltag' || substr(getreq('op'),-8) == 'and Open');
 
 if (! $no_pagestart) {
-	pagestart('My ' . getLanguage($currentlang) . ' Texts',true);
+	pagestart('My ' . getLanguage($currentlang) . ' Sentences',true);
 }
 
 $message = '';
@@ -312,14 +312,14 @@ if (isset($_REQUEST['new'])) {
 	
 	?>
 
-	<h4>New Text <a target="_blank" href="info.htm#howtotext"><img src="icn/question-frame.png" title="Help" alt="Help" /></a> </h4>
+	<h4>New Sentence <a target="_blank" href="info.htm#howtotext"><img src="icn/question-frame.png" title="Help" alt="Help" /></a> </h4>
 	<script type="text/javascript" src="js/unloadformcheck.js" charset="utf-8"></script>	
 	<form class="validate" action="<?php echo $_SERVER['PHP_SELF']; ?>" method="post">
 	<table class="tab3" cellspacing="0" cellpadding="5">
 	<tr>
 	<td class="td1 right">Language:</td>
 	<td class="td1">
-	<select name="TxLgID" class="notempty setfocus">
+	<select name="StLgID" class="notempty setfocus">
 	<?php
 	echo get_languages_selectoptions($currentlang,'[Choose...]');
 	?>
@@ -328,17 +328,17 @@ if (isset($_REQUEST['new'])) {
 	</tr>
 	<tr>
 	<td class="td1 right">Title:</td>
-	<td class="td1"><input type="text" class="notempty" name="TxTitle" value="" maxlength="200" size="60" /> <img src="icn/status-busy.png" title="Field must not be empty" alt="Field must not be empty" /></td>
+	<td class="td1"><input type="text" class="notempty" name="StTitle" value="" maxlength="200" size="60" /> <img src="icn/status-busy.png" title="Field must not be empty" alt="Field must not be empty" /></td>
 	</tr>
 	<tr>
 	<td class="td1 right">Text:<br /><br />(max.<br />65,000<br />bytes)</td>
 	<td class="td1">
-	<textarea name="TxText" class="notempty checkbytes" data_maxlength="65000" data_info="Text" cols="60" rows="20"></textarea> <img src="icn/status-busy.png" title="Field must not be empty" alt="Field must not be empty" />
+	<textarea name="StText" class="notempty checkbytes" data_maxlength="65000" data_info="Text" cols="60" rows="20"></textarea> <img src="icn/status-busy.png" title="Field must not be empty" alt="Field must not be empty" />
 	</td>
 	</tr>
 	<tr>
 	<td class="td1 right">Source URI:</td>
-	<td class="td1"><input type="text" class="checkurl" data_info="Source URI" name="TxSourceURI" value="" maxlength="1000" size="60" /></td>
+	<td class="td1"><input type="text" class="checkurl" data_info="Source URI" name="StSourceURI" value="" maxlength="1000" size="60" /></td>
 	</tr>
 	<tr>
 	<td class="td1 right">Tags:</td>
@@ -348,7 +348,7 @@ if (isset($_REQUEST['new'])) {
 	</tr>
 	<tr>
 	<td class="td1 right">Audio-URI:</td>
-	<td class="td1"><input type="text" name="TxAudioURI" value="" maxlength="200" size="60" />		
+	<td class="td1"><input type="text" name="StAudioURI" value="" maxlength="200" size="60" />		
 	<span id="mediaselect"><?php echo selectmediapath('TxAudioURI'); ?></span>		
 	</td>
 	</tr>
@@ -471,7 +471,7 @@ else {
 ?>
 
 <p>
-<a href="<?php echo $_SERVER['PHP_SELF']; ?>?new=1"><img src="icn/plus-button.png" title="New" alt="New" /> New Text ...</a> &nbsp; | &nbsp;
+<a href="<?php echo $_SERVER['PHP_SELF']; ?>?new=1"><img src="icn/plus-button.png" title="New" alt="New" /> New Sentence ...</a> &nbsp; | &nbsp;
 <a href="long_text_import.php"><img src="icn/plus-button.png" title="Long Text Import" alt="Long Text Import" /> Long Text Import ...</a>
 </p>
 
