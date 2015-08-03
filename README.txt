@@ -1,3 +1,10 @@
+What I'm planning to do is to add Learning with Sentences feature.
+Also the program could search for sentences, which we almost 
+know, from http://tatoeba.org/
+I would also like to add, that words like "thing" and "things", 
+"eat", "eats" (etc.) are the same only, so you don't have to
+add them always to known words.
+
 Learning with Texts (LWT) is a tool for Language Learning.
 
 PLEASE READ MORE ... 
