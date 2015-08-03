@@ -128,6 +128,8 @@ if (! areCookiesEnabled()) document.write('<p class="red">*** Cookies are not en
 <li><a href="edit_archivedtexts.php">My Text Archive</a></li>
 <li><a href="edit_texttags.php">My Text Tags</a>
 	<br /><br /></li>
+<li><a href="edit_sentences.php">My Sentences</a>
+	<br /><br /></li>
 <li><a href="edit_languages.php">My Languages</a>
 	<br /><br /></li>
 <li><a href="edit_words.php">My Terms (Words and Expressions)</a></li>
