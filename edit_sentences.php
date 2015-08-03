@@ -257,14 +257,14 @@ elseif (isset($_REQUEST['op'])) {
 		// INSERT
 		
 		elseif (substr($_REQUEST['op'],0,4) == 'Save') {
-			$message1 = runsql('insert into ' . $tbpref . 'texts (TxLgID, TxTitle, TxText, TxAnnotatedText, TxAudioURI, TxSourceURI) values( ' . 
-			$_REQUEST["TxLgID"] . ', ' . 
-			convert_string_to_sqlsyntax($_REQUEST["TxTitle"]) . ', ' . 
-			convert_string_to_sqlsyntax($_REQUEST["TxText"]) . ", '', " .
-			convert_string_to_sqlsyntax($_REQUEST["TxAudioURI"]) . ', ' .
-			convert_string_to_sqlsyntax($_REQUEST["TxSourceURI"]) . ')', "Saved");
+			$message1 = runsql('insert into ' . $tbpref . 'onlysentences (StLgID, StTitle, StText, StAnnotatedText, StAudioURI, StSourceURI) values( ' . 
+			$_REQUEST["StLgID"] . ', ' . 
+			convert_string_to_sqlsyntax($_REQUEST["StTitle"]) . ', ' . 
+			convert_string_to_sqlsyntax($_REQUEST["StText"]) . ", '', " .
+			convert_string_to_sqlsyntax($_REQUEST["StAudioURI"]) . ', ' .
+			convert_string_to_sqlsyntax($_REQUEST["StSourceURI"]) . ')', "Saved");
 			$id = get_last_key();
-			saveTextTags($id);
+			//saveTextTags($id);
 		} 
 		
 		// UPDATE
@@ -290,10 +290,10 @@ elseif (isset($_REQUEST['op'])) {
 		adjust_autoincr('sentences','SeID');
 		adjust_autoincr('textitems','TiID');
 	
-		splitCheckText(
-			get_first_value(
-				'select TxText as value from ' . $tbpref . 'texts where TxID = ' . $id), 
-			$_REQUEST["TxLgID"], $id );
+		//splitCheckText(
+		//	get_first_value(
+		//		'select TxText as value from ' . $tbpref . 'texts where TxID = ' . $id), 
+		//	$_REQUEST["TxLgID"], $id );
 			
 		$message = $message1 . " / " . $message2 . " / " . $message3 . " / Sentences added: " . get_first_value('select count(*) as value from ' . $tbpref . 'sentences where SeTxID = ' . $id) . " / Text items added: " . get_first_value('select count(*) as value from ' . $tbpref . 'textitems where TiTxID = ' . $id);
 		
