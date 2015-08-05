@@ -65,9 +65,9 @@ $currenttag1 = validateTextTag(processSessParam("tag1","currenttexttag1",'',0),$
 $currenttag2 = validateTextTag(processSessParam("tag2","currenttexttag2",'',0),$currentlang);
 $currenttag12 = processSessParam("tag12","currenttexttag12",'',0);
 
-$wh_lang = ($currentlang != '') ? (' and TxLgID=' . $currentlang) : '';
+$wh_lang = ($currentlang != '') ? (' and StLgID=' . $currentlang) : '';
 $wh_query = convert_string_to_sqlsyntax(str_replace("*","%",mb_strtolower($currentquery, 'UTF-8')));
-$wh_query = ($currentquery != '') ? (' and TxTitle like ' . $wh_query) : '';
+$wh_query = ($currentquery != '') ? (' and StTitle like ' . $wh_query) : '';
 
 if ($currenttag1 == '' && $currenttag2 == '')
 	$wh_tag = '';
@@ -451,7 +451,7 @@ else {
 
 	echo error_message_with_hide($message,0);
 	
-	$sql = 'select count(*) as value from (select TxID from (' . $tbpref . 'texts left JOIN ' . $tbpref . 'texttags ON TxID = TtTxID) where (1=1) ' . $wh_lang . $wh_query . ' group by TxID ' . $wh_tag . ') as dummy';
+	$sql = 'select count(*) as value from (select StID from (' . $tbpref . 'onlysentences left JOIN ' . $tbpref . 'texttags ON StID = TtTxID) where (1=1) ' . $wh_lang . $wh_query . ' group by StID ' . $wh_tag . ') as dummy';
 	$recno = get_first_value($sql);
 	if ($debug) echo $sql . ' ===&gt; ' . $recno;
 
@@ -463,7 +463,7 @@ else {
 	if ($currentpage > $pages) $currentpage = $pages;
 	$limit = 'LIMIT ' . (($currentpage-1) * $maxperpage) . ',' . $maxperpage;
 
-	$sorts = array('TxTitle','TxID desc','TxID');
+	$sorts = array('StTitle','StID desc','StID');
 	$lsorts = count($sorts);
 	if ($currentsort < 1) $currentsort = 1;
 	if ($currentsort > $lsorts) $currentsort = $lsorts;
@@ -479,31 +479,31 @@ else {
 <table class="tab1" cellspacing="0" cellpadding="5">
 <tr>
 <th class="th1" colspan="4">Filter <img src="icn/funnel.png" title="Filter" alt="Filter" />&nbsp;
-<input type="button" value="Reset All" onclick="resetAll('edit_texts.php');" /></th>
+<input type="button" value="Reset All" onclick="resetAll('edit_sentences.php');" /></th>
 </tr>
 <tr>
 <td class="td1 center" colspan="2">
 Language:
-<select name="filterlang" onchange="{setLang(document.form1.filterlang,'edit_texts.php');}"><?php	echo get_languages_selectoptions($currentlang,'[Filter off]'); ?></select>
+<select name="filterlang" onchange="{setLang(document.form1.filterlang,'edit_sentences.php');}"><?php	echo get_languages_selectoptions($currentlang,'[Filter off]'); ?></select>
 </td>
 <td class="td1 center" colspan="2">
 Text Title (Wildc.=*):
 <input type="text" name="query" value="<?php echo tohtml($currentquery); ?>" maxlength="50" size="15" />&nbsp;
-<input type="button" name="querybutton" value="Filter" onclick="{val=document.form1.query.value; location.href='edit_texts.php?page=1&amp;query=' + val;}" />&nbsp;
-<input type="button" value="Clear" onclick="{location.href='edit_texts.php?page=1&amp;query=';}" />
+<input type="button" name="querybutton" value="Filter" onclick="{val=document.form1.query.value; location.href='edit_sentences.php?page=1&amp;query=' + val;}" />&nbsp;
+<input type="button" value="Clear" onclick="{location.href='edit_sentences.php?page=1&amp;query=';}" />
 </td>
 </tr>
 <tr>
 <td class="td1 center" colspan="2" nowrap="nowrap">
 Tag #1:
-<select name="tag1" onchange="{val=document.form1.tag1.options[document.form1.tag1.selectedIndex].value; location.href='edit_texts.php?page=1&amp;tag1=' + val;}"><?php echo get_texttag_selectoptions($currenttag1,$currentlang); ?></select>
+<select name="tag1" onchange="{val=document.form1.tag1.options[document.form1.tag1.selectedIndex].value; location.href='edit_sentences.php?page=1&amp;tag1=' + val;}"><?php echo get_texttag_selectoptions($currenttag1,$currentlang); ?></select>
 </td>
 <td class="td1 center" nowrap="nowrap">
-Tag #1 .. <select name="tag12" onchange="{val=document.form1.tag12.options[document.form1.tag12.selectedIndex].value; location.href='edit_texts.php?page=1&amp;tag12=' + val;}"><?php echo get_andor_selectoptions($currenttag12); ?></select> .. Tag #2
+Tag #1 .. <select name="tag12" onchange="{val=document.form1.tag12.options[document.form1.tag12.selectedIndex].value; location.href='edit_sentences.php?page=1&amp;tag12=' + val;}"><?php echo get_andor_selectoptions($currenttag12); ?></select> .. Tag #2
 </td>
 <td class="td1 center" nowrap="nowrap">
 Tag #2:
-<select name="tag2" onchange="{val=document.form1.tag2.options[document.form1.tag2.selectedIndex].value; location.href='edit_texts.php?page=1&amp;tag2=' + val;}"><?php echo get_texttag_selectoptions($currenttag2,$currentlang); ?></select>
+<select name="tag2" onchange="{val=document.form1.tag2.options[document.form1.tag2.selectedIndex].value; location.href='edit_sentences.php?page=1&amp;tag2=' + val;}"><?php echo get_texttag_selectoptions($currenttag2,$currentlang); ?></select>
 </td>
 </tr>
 <?php if($recno > 0) { ?>
@@ -511,10 +511,10 @@ Tag #2:
 <th class="th1" colspan="1" nowrap="nowrap">
 <?php echo $recno; ?> Text<?php echo ($recno==1?'':'s'); ?>
 </th><th class="th1" colspan="2" nowrap="nowrap">
-<?php makePager ($currentpage, $pages, 'edit_texts.php', 'form1', 1); ?>
+<?php makePager ($currentpage, $pages, 'edit_sentences.php', 'form1', 1); ?>
 </th><th class="th1" colspan="1" nowrap="nowrap">
 Sort Order:
-<select name="sort" onchange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_texts.php?page=1&amp;sort=' + val;}"><?php echo get_textssort_selectoptions($currentsort); ?></select>
+<select name="sort" onchange="{val=document.form1.sort.options[document.form1.sort.selectedIndex].value; location.href='edit_sentences.php?page=1&amp;sort=' + val;}"><?php echo get_textssort_selectoptions($currentsort); ?></select>
 </th></tr>
 <?php } ?>
 </table>
@@ -554,42 +554,42 @@ Marked Texts:&nbsp;
 
 <?php
 
-$sql = 'select TxID, TxTitle, LgName, TxAudioURI, TxSourceURI, length(TxAnnotatedText) as annotlen, ifnull(concat(\'[\',group_concat(distinct T2Text order by T2Text separator \', \'),\']\'),\'\') as taglist from ((' . $tbpref . 'texts left JOIN ' . $tbpref . 'texttags ON TxID = TtTxID) left join ' . $tbpref . 'tags2 on T2ID = TtT2ID), ' . $tbpref . 'languages where LgID=TxLgID ' . $wh_lang . $wh_query . ' group by TxID ' . $wh_tag . ' order by ' . $sorts[$currentsort-1] . ' ' . $limit;
+$sql = 'select StID, StTitle, LgName, StAudioURI, StSourceURI, length(StAnnotatedText) as annotlen, ifnull(concat(\'[\',group_concat(distinct T2Text order by T2Text separator \', \'),\']\'),\'\') as taglist from ((' . $tbpref . 'onlysentences left JOIN ' . $tbpref . 'texttags ON StID = TtTxID) left join ' . $tbpref . 'tags2 on T2ID = TtT2ID), ' . $tbpref . 'languages where LgID=StLgID ' . $wh_lang . $wh_query . ' group by StID ' . $wh_tag . ' order by ' . $sorts[$currentsort-1] . ' ' . $limit;
 if ($debug) echo $sql;
 $res = do_mysql_query($sql);
 $showCounts = getSettingWithDefault('set-show-text-word-counts')+0;
 while ($record = mysql_fetch_assoc($res)) {
 	if ($showCounts) {
 		flush();
-		$txttotalwords = textwordcount($record['TxID']);
-		$txtworkedwords = textworkcount($record['TxID']);
-		$txtworkedexpr = textexprcount($record['TxID']);
-		$txtworkedall = $txtworkedwords + $txtworkedexpr;
-		$txttodowords = $txttotalwords - $txtworkedwords;
+		$sttotalwords = textwordcount($record['StID']);
+		$stworkedwords = textworkcount($record['StID']);
+		$stworkedexpr = textexprcount($record['StID']);
+		$stworkedall = $stworkedwords + $stworkedexpr;
+		$sttodowords = $sttotalwords - $stworkedwords;
 		$percentunknown = 0;
-		if ($txttotalwords != 0) {
+		if ($sttotalwords != 0) {
 			$percentunknown = 
-				round(100*$txttodowords/$txttotalwords,0);
+				round(100*$sttodowords/$sttotalwords,0);
 			if ($percentunknown > 100) $percentunknown = 100;
 			if ($percentunknown < 0) $percentunknown = 0;
 		}
 	}
-	$audio = $record['TxAudioURI'];
+	$audio = $record['StAudioURI'];
 	if(!isset($audio)) $audio='';
 	$audio=trim($audio);
 	echo '<tr>';
-	echo '<td class="td1 center"><a name="rec' . $record['TxID'] . '"><input name="marked[]" class="markcheck" type="checkbox" value="' . $record['TxID'] . '" ' . checkTest($record['TxID'], 'marked') . ' /></a></td>';
-	echo '<td nowrap="nowrap" class="td1 center">&nbsp;<a href="do_text.php?start=' . $record['TxID'] . '"><img src="icn/book-open-bookmark.png" title="Read" alt="Read" /></a>&nbsp; <a href="do_test.php?text=' . $record['TxID'] . '"><img src="icn/question-balloon.png" title="Test" alt="Test" /></a>&nbsp;</td>';
-	echo '<td nowrap="nowrap" class="td1 center">&nbsp;<a href="print_text.php?text=' . $record['TxID'] . '"><img src="icn/printer.png" title="Print" alt="Print" /></a>&nbsp; <a href="' . $_SERVER['PHP_SELF'] . '?arch=' . $record['TxID'] . '"><img src="icn/inbox-download.png" title="Archive" alt="Archive" /></a>&nbsp; <a href="' . $_SERVER['PHP_SELF'] . '?chg=' . $record['TxID'] . '"><img src="icn/document--pencil.png" title="Edit" alt="Edit" /></a>&nbsp; <span class="click" onclick="if (confirm (\'Are you sure?\')) location.href=\'' . $_SERVER['PHP_SELF'] . '?del=' . $record['TxID'] . '\';"><img src="icn/minus-button.png" title="Delete" alt="Delete" /></span>&nbsp;</td>';
+	echo '<td class="td1 center"><a name="rec' . $record['StID'] . '"><input name="marked[]" class="markcheck" type="checkbox" value="' . $record['StID'] . '" ' . checkTest($record['StID'], 'marked') . ' /></a></td>';
+	echo '<td nowrap="nowrap" class="td1 center">&nbsp;<a href="do_text.php?start=' . $record['StID'] . '"><img src="icn/book-open-bookmark.png" title="Read" alt="Read" /></a>&nbsp; <a href="do_test.php?text=' . $record['StID'] . '"><img src="icn/question-balloon.png" title="Test" alt="Test" /></a>&nbsp;</td>';
+	echo '<td nowrap="nowrap" class="td1 center">&nbsp;<a href="print_text.php?text=' . $record['StID'] . '"><img src="icn/printer.png" title="Print" alt="Print" /></a>&nbsp; <a href="' . $_SERVER['PHP_SELF'] . '?arch=' . $record['StID'] . '"><img src="icn/inbox-download.png" title="Archive" alt="Archive" /></a>&nbsp; <a href="' . $_SERVER['PHP_SELF'] . '?chg=' . $record['StID'] . '"><img src="icn/document--pencil.png" title="Edit" alt="Edit" /></a>&nbsp; <span class="click" onclick="if (confirm (\'Are you sure?\')) location.href=\'' . $_SERVER['PHP_SELF'] . '?del=' . $record['StID'] . '\';"><img src="icn/minus-button.png" title="Delete" alt="Delete" /></span>&nbsp;</td>';
 	if ($currentlang == '') echo '<td class="td1 center">' . tohtml($record['LgName']) . '</td>';
-	echo '<td class="td1 center">' . tohtml($record['TxTitle']) . ' <span class="smallgray2">' . tohtml($record['taglist']) . '</span> &nbsp;' . (($audio != '') ? '<img src="icn/speaker-volume.png" title="With Audio" alt="With Audio" />' : '') . (isset($record['TxSourceURI']) ? ' <a href="' . $record['TxSourceURI'] . '" target="_blank"><img src="icn/chain.png" title="Link to Text Source" alt="Link to Text Source" /></a>' : '') . ($record['annotlen'] ? ' <a href="print_impr_text.php?text=' . $record['TxID'] . '"><img src="icn/tick.png" title="Annotated Text available" alt="Annotated Text available" /></a>' : '') . '</td>';
+	echo '<td class="td1 center">' . tohtml($record['StTitle']) . ' <span class="smallgray2">' . tohtml($record['taglist']) . '</span> &nbsp;' . (($audio != '') ? '<img src="icn/speaker-volume.png" title="With Audio" alt="With Audio" />' : '') . (isset($record['StSourceURI']) ? ' <a href="' . $record['StSourceURI'] . '" target="_blank"><img src="icn/chain.png" title="Link to Text Source" alt="Link to Text Source" /></a>' : '') . ($record['annotlen'] ? ' <a href="print_impr_text.php?text=' . $record['StID'] . '"><img src="icn/tick.png" title="Annotated Text available" alt="Annotated Text available" /></a>' : '') . '</td>';
 	if ($showCounts) {
-		echo '<td class="td1 center"><span title="Total">&nbsp;' . $txttotalwords . '&nbsp;</span></td>'; 
-		echo '<td class="td1 center"><span title="Saved" class="status4">&nbsp;' . ($txtworkedall > 0 ? '<a href="edit_words.php?page=1&amp;query=&amp;status=&amp;tag12=0&amp;tag2=&amp;tag1=&amp;text=' . $record['TxID'] . '">' . $txtworkedwords . '+' . $txtworkedexpr . '</a>' : '0' ) . '&nbsp;</span></td>';
-		echo '<td class="td1 center"><span title="Unknown" class="status0">&nbsp;' . $txttodowords . '&nbsp;</span></td>';
+		echo '<td class="td1 center"><span title="Total">&nbsp;' . $sttotalwords . '&nbsp;</span></td>'; 
+		echo '<td class="td1 center"><span title="Saved" class="status4">&nbsp;' . ($stworkedall > 0 ? '<a href="edit_words.php?page=1&amp;query=&amp;status=&amp;tag12=0&amp;tag2=&amp;tag1=&amp;text=' . $record['StID'] . '">' . $stworkedwords . '+' . $stworkedexpr . '</a>' : '0' ) . '&nbsp;</span></td>';
+		echo '<td class="td1 center"><span title="Unknown" class="status0">&nbsp;' . $sttodowords . '&nbsp;</span></td>';
 		echo '<td class="td1 center"><span title="Unknown (%)">' . $percentunknown . '</span></td>';
 	} else {
-		echo '<td class="td1 center"><span id="total-' . $record['TxID'] . '"></span></td><td class="td1 center"><span data_id="' . $record['TxID'] . '" id="saved-' . $record['TxID'] . '"><span class="click" onclick="do_ajax_word_counts();"><img src="icn/lightning.png" title="View Word Counts" alt="View Word Counts" /></span></span></td><td class="td1 center"><span id="todo-' . $record['TxID'] . '"></span></td><td class="td1 center"><span id="todop-' . $record['TxID'] . '"></span></td>'; 
+		echo '<td class="td1 center"><span id="total-' . $record['StID'] . '"></span></td><td class="td1 center"><span data_id="' . $record['StID'] . '" id="saved-' . $record['StID'] . '"><span class="click" onclick="do_ajax_word_counts();"><img src="icn/lightning.png" title="View Word Counts" alt="View Word Counts" /></span></span></td><td class="td1 center"><span id="todo-' . $record['StID'] . '"></span></td><td class="td1 center"><span id="todop-' . $record['StID'] . '"></span></td>'; 
 	}
 	echo '</tr>';
 }
@@ -606,7 +606,7 @@ mysql_free_result($res);
 <th class="th1" nowrap="nowrap">
 <?php echo $recno; ?> Text<?php echo ($recno==1?'':'s'); ?>
 </th><th class="th1" nowrap="nowrap">
-<?php makePager ($currentpage, $pages, 'edit_texts.php', 'form3', 2); ?>
+<?php makePager ($currentpage, $pages, 'edit_sentences.php', 'form3', 2); ?>
 </th></tr></table>
 </form>
 <?php 
